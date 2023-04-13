@@ -20,7 +20,7 @@ let defaults = {
     WEB_URL: process.env.WEB_URL || 'http://localhost:3000',
     ADMIN_WEB_URL: process.env.ADMIN_WEB_URL || 'http://localhost:3000',
     swagger: require('./swagger'),
-    PATH_TO_UPLOAD_FILES_ON_LOCAL: process.env.PATH_TO_UPLOAD_FILES_ON_LOCAL || '/uploads/files',
+    PATH_TO_UPLOAD_FILES_ON_LOCAL: process.env.PATH_TO_UPLOAD_FILES_ON_LOCAL || '/uploads',
     UPLOAD_TO_S3_BUCKET: process.env.UPLOAD_TO_S3_BUCKET || false,
     SOCKET_LOADBALANCING_ENABLE: process.env.SOCKET_LOADBALANCING_ENABLE || false,
     LIVE_LOGGER_ENABLE: process.env.LIVE_LOGGER_ENABLE || false,

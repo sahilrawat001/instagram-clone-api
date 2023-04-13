@@ -10,7 +10,7 @@ const { MESSAGES, ERROR_TYPES, AVAILABLE_AUTHS } = require('./constants');
 const HELPERS = require('../helpers');
 const utils = require('./utils'); 
 const multer = require('multer');
-const { log } = require('console');
+const { log } = require('console'); 
 const uploadMiddleware = multer();
 
 let routeUtils = {};
@@ -30,7 +30,10 @@ routeUtils.route = async (app, routes = []) => {
             middlewares.push(SERVICES.authService.validateApiKey());
         }
         if (route.auth) {
-            middlewares.push(SERVICES.authService.userValidate(route.auth));
+            console.log(route.auth, " route auth ===");
+                
+                middlewares.push(SERVICES.authService.userValidate(route.auth));
+          
         };
         app.route(route.path)[route.method.toLowerCase()](...middlewares, getHandlerMethod(route));
         // app.route("/path/getdata").post(abc, def, controller);
@@ -68,8 +71,7 @@ let joiValidatorMethod = async (request, route) => {
         checkJoiValidationError(request.query);
     }
     if (route.joiSchemaForSwagger.headers && Object.keys(route.joiSchemaForSwagger.headers).length) {
-        console.log(route.joiSchemaForSwagger.headers, '-----');
-
+ 
         let headersObject = await Joi.object(route.joiSchemaForSwagger.headers).unknown(true).validate(request.headers);
         checkJoiValidationError(headersObject);
         request.headers.authorization = ((headersObject || {}).value || {}).authorization;
@@ -133,6 +135,7 @@ let getMulterMiddleware = (formData) => {
     //for single file
     if (formData.file && Object.keys(formData.file).length) {
         const fileField = Object.keys(formData.file)[0];
+        console.log(fileField);
         return uploadMiddleware.single(fileField);
     };
     //for file array in single key
@@ -147,25 +150,26 @@ let getMulterMiddleware = (formData) => {
 * @param {*} handler 
 */
 let getHandlerMethod = (route) => {
-    let handler = route.handler
+    let handler = route.handler;
     return (request, response) => {
+        console.log(request.headers.auth,'+--+-');
         let payload = {
             ...((request.body || {}).value || {}),
             ...((request.params || {}).value || {}),
             ...((request.query || {}).value || {}),
+            ...((request.headers || {}).value || {}),
             file: (request.file || {}),
             user: (request.user ? request.user : {}),
         };
+        console.log(payload,'*-*-');
         //request handler/controller
         if (route.getExactRequest) {
             request.payload = payload;
             payload = request
         }
-        console.log(payload,"**********")
-        handler(payload) 
+         handler(payload) 
             .then((result) => {
-            console.log("============");
-            if (result.filePath) {
+             if (result.filePath) {
                 let filePath = path.resolve(__dirname + '/../' + result.filePath)
                 return response.status(result.statusCode).sendFile(filePath)
             }

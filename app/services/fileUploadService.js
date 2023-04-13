@@ -10,6 +10,8 @@ const userModel = require('../models/userModel');
 const moment = require('moment-timezone');
 const S3UploadStream = require('s3-upload-stream')
 const { syncWait } = require('../utils/utils')
+var url = require('url');
+
 
 AWS.config.update({ accessKeyId: CONFIG.S3_BUCKET.accessKeyId, secretAccessKey: CONFIG.S3_BUCKET.secretAccessKey });
 let s3Bucket = new AWS.S3();
@@ -42,8 +44,10 @@ fileUploadService.uploadFileToS3 = (payload, fileName, bucketName) => {
  * function to upload file to local server.
  */
 fileUploadService.uploadFileToLocal = async (payload, fileName, pathToUpload, pathOnServer) => {
-    let directoryPath = pathToUpload ? pathToUpload : path.resolve(__dirname + `../../..${CONFIG.PATH_TO_UPLOAD_SUBMISSIONS_ON_LOCAL}`);
+    let directoryPath = pathToUpload ? pathToUpload : path.resolve(__dirname + `../../..${CONFIG.PATH_TO_UPLOAD_FILES_ON_LOCAL}`);
     // create user's directory if not present.
+    fileName  =Date.now()+fileName;
+    console.log(directoryPath, '----*****');
     if (!fs.existsSync(directoryPath)) {
         fs.mkdirSync(directoryPath);
     }
@@ -58,8 +62,11 @@ fileUploadService.uploadFileToLocal = async (payload, fileName, pathToUpload, pa
             if (err) {
                 reject(err);
             } else {
-                let fileUrl = pathToUpload ? `${CONFIG.SERVER_URL}${pathOnServer}/${fileName}` : `${CONFIG.SERVER_URL}${CONFIG.PATH_TO_UPLOAD_SUBMISSIONS_ON_LOCAL}/${fileName}`;
-                resolve(fileUrl);
+                let fileUrl = pathToUpload ? `${CONFIG.SERVER_URL}${pathOnServer}/${fileName}` : `${CONFIG.SERVER_URL}${CONFIG.PATH_TO_UPLOAD_FILES_ON_LOCAL}/${fileName}`;
+                var q = url.parse(fileUrl, true);
+                 console.log(q);
+                 console.log(q.pathname);
+                 resolve(q);
             }
         });
     });
@@ -71,10 +78,10 @@ fileUploadService.uploadFileToLocal = async (payload, fileName, pathToUpload, pa
 fileUploadService.uploadFile = async (payload, pathToUpload, pathOnServer) => {
     let fileExtention = payload.file.originalname.split('.')[1];
     let fileName = `upload_${Date.now()}.${fileExtention}`, fileUrl = '';
-    if(payload.type == FILE_UPLOAD_TYPE.USER_MEAL){
+    if (payload.type == FILE_UPLOAD_TYPE.USER_MEAL) {
         fileName = `uploads/images/fuel/fuel_${Date.now()}.${fileExtention}`;
     }
-    else if(payload.type == FILE_UPLOAD_TYPE.PROFILE_IMAGE){
+    else if (payload.type == FILE_UPLOAD_TYPE.PROFILE_IMAGE) {
         fileExtention = (fileExtention) ? fileExtention : 'png';
         fileName = `profiles/profile_${Date.now()}.${fileExtention}`;
     }
@@ -82,12 +89,12 @@ fileUploadService.uploadFile = async (payload, pathToUpload, pathOnServer) => {
         fileExtention = (fileExtention) ? fileExtention : 'png';
         fileName = `events/${payload.eventId}/sc_${Date.now()}.${fileExtention}`;
     }
-    else if(payload.type == FILE_UPLOAD_TYPE.EVENT_RECORDING){
+    else if (payload.type == FILE_UPLOAD_TYPE.EVENT_RECORDING) {
         fileExtention = (fileExtention) ? fileExtention : 'mp4';
         fileName = `events/${payload.eventId}/recordings/recording_${Date.now()}.${fileExtention}`;
     }
-    else if(payload.type == FILE_UPLOAD_TYPE.POSTURE){
-        let user = await userModel.findOne({_id:payload.userId});
+    else if (payload.type == FILE_UPLOAD_TYPE.POSTURE) {
+        let user = await userModel.findOne({ _id: payload.userId });
         let userTZ = user.timeZone || CONFIG.DEFAULT_TZ;
         let date = new Date(moment().tz(userTZ).startOf("day"))
         date = date.getTime();
@@ -107,18 +114,18 @@ fileUploadService.uploadFile = async (payload, pathToUpload, pathOnServer) => {
  * function to get a file from s3(AWS) bucket.
  */
 fileUploadService.getS3File = async (payload, bucketName) => {
-    return new Promise((resolve,reject) =>{
-        s3Bucket.getObject({ Bucket: bucketName || CONFIG.S3_BUCKET.bucketName, Key: payload.path }, function(err, data) {
-            if (err){
-                if(err && err.code == "AccessDenied"){
-                    resolve({not_found: true});
+    return new Promise((resolve, reject) => {
+        s3Bucket.getObject({ Bucket: bucketName || CONFIG.S3_BUCKET.bucketName, Key: payload.path }, function (err, data) {
+            if (err) {
+                if (err && err.code == "AccessDenied") {
+                    resolve({ not_found: true });
                 }
-                else{
+                else {
                     console.log("S3 file getting error", err);
                     reject(new Error("S3 file getting error"));
                 }
             }
-            else{
+            else {
                 resolve(data)
             }
         });

@@ -12,7 +12,7 @@ const userSchema = new Schema({
         type: String,
     unique:true
     },
-    dob: { type: Date },
+    dob: { type: Date , default:''},
      email: { type: String},
     mobile: {
         type:Number ,
@@ -39,10 +39,12 @@ const userSchema = new Schema({
         default:true
     },
     userBio: {
-        type: String,       
+        type: String,     
+        default:''
     },
     profilePic: {
-        type:String
+        type: String,
+        default:''
     }
 },
 );

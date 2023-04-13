@@ -1,10 +1,10 @@
 'use strict';
 
-let dbService = {};
+let dbService = {}; 
 
 /**
 * function to create.
-*/
+*/ 
 dbService.create = async (model, payload) => {
     return await new model(payload).save();
 };

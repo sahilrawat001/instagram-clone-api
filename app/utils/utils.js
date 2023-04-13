@@ -10,12 +10,12 @@ const CONSTANTS = require('./constants');
 
 const sessionModel = require('../models/sessionModel');
 const { createPinoBrowserSend, createWriteStream } = require("pino-logflare");
-const {  SMTP, WEB_URL, ADMIN_WEB_URL, PINO, ENVIRONMENT, LIVE_LOGGER_ENABLE } = require('../../config');
+const { SMTP, WEB_URL, ADMIN_WEB_URL, PINO, ENVIRONMENT, LIVE_LOGGER_ENABLE } = require('../../config');
 
 const PINO_CRED = { apiKey: PINO.API_KEY, sourceToken: PINO.API_SECRET };
 
-const stream = createWriteStream( PINO_CRED ); // create pino-logflare stream
-const send = createPinoBrowserSend( PINO_CRED ); // create pino-logflare browser stream
+const stream = createWriteStream(PINO_CRED); // create pino-logflare stream
+const send = createPinoBrowserSend(PINO_CRED); // create pino-logflare browser stream
 
 // const awsSnsConfig = {
 //     accessKeyId: AWS.accessKeyId,
@@ -59,7 +59,7 @@ commonFunctions.convertIdToMongooseId = (stringId) => {
  * create jsonwebtoken
  */
 commonFunctions.encryptJwt = (payload) => {
-    return JWT.sign(payload, CONSTANTS.SECURITY.JWT_SIGN_KEY, { algorithm: 'HS256'});
+    return JWT.sign(payload, CONSTANTS.SECURITY.JWT_SIGN_KEY, { algorithm: 'HS256' });
 };
 
 /**
@@ -91,16 +91,16 @@ commonFunctions.convertErrorIntoReadableForm = (error) => {
  * Logger for error and success
  */
 commonFunctions.log = {
-    info: (data) =>{
-        console.log('\x1b[33m' + data,'\x1b[0m');
+    info: (data) => {
+        console.log('\x1b[33m' + data, '\x1b[0m');
     },
-    success: (data) =>{
-        console.log('\x1b[32m' + data,'\x1b[0m');
+    success: (data) => {
+        console.log('\x1b[32m' + data, '\x1b[0m');
     },
-    error: (data) =>{
-        console.log('\x1b[31m' + data,'\x1b[0m');
+    error: (data) => {
+        console.log('\x1b[31m' + data, '\x1b[0m');
     },
-    default: (data) =>{
+    default: (data) => {
         console.log(data, '\x1b[0m');
     }
 };
@@ -132,15 +132,15 @@ commonFunctions.sendEmail = async (userData, type) => {
     const handleBars = require('handlebars');
     /** setup email data with unicode symbols **/
     const mailData = commonFunctions.emailTypes(userData, type), email = userData.email, ccEmail = userData.ccEmail, bccEmail = userData.bccEmail;
-    let template="";
-    let result="";
-    if(mailData && mailData.template){
+    let template = "";
+    let result = "";
+    if (mailData && mailData.template) {
         template = handleBars.compile(mailData.template);
     }
-    if(template){
+    if (template) {
         result = template(mailData.data);
     }
-    
+
     let emailToSend = {
         to: email,
         cc: ccEmail,
@@ -148,13 +148,13 @@ commonFunctions.sendEmail = async (userData, type) => {
         from: SMTP.SENDER,
         subject: mailData.Subject
     }
-    if(userData.attachments && userData.attachments.length){
+    if (userData.attachments && userData.attachments.length) {
         emailToSend.attachments = userData.attachments;
     }
     if (result) {
         emailToSend.html = result;
     }
-    if(userData.icalEvent){
+    if (userData.icalEvent) {
         emailToSend.icalEvent = userData.icalEvent;
     }
     return await transporter.sendMail(emailToSend);
@@ -175,8 +175,8 @@ commonFunctions.emailTypes = (user, type) => {
             EmailStatus.template = CONSTANTS.EMAIL_CONTENTS.WELCOME_EMAIL;
             EmailStatus.data['name'] = user.name;
             break;
-        
-        case CONSTANTS.EMAIL_TYPES.ICALENDER_EMAIL: 
+
+        case CONSTANTS.EMAIL_TYPES.ICALENDER_EMAIL:
             EmailStatus['Subject'] = CONSTANTS.EMAIL_SUBJECTS.ICALENDER_EMAIL;
             break;
 
@@ -202,6 +202,7 @@ commonFunctions.createResetPasswordLink = (userData) => {
     let baseUrl = (userData.userType == CONSTANTS.USER_TYPE.STAFF) ? WEB_URL : ADMIN_WEB_URL;
     let resetPasswordLink = baseUrl + '/reset-password/' + commonFunctions.encryptJwt(dataForJWT);
     return resetPasswordLink;
+    localhost4000/reset-password/atbdshjop.fsgfsjfdlnfr.deidyew7
 };
 
 /**
@@ -250,13 +251,13 @@ commonFunctions.generateExpiryTime = (seconds) => {
  */
 commonFunctions.convertSecondsToHMS = (value) => {
     const sec = parseInt(value, 10);
-    let hours   = Math.floor(sec / 3600);
+    let hours = Math.floor(sec / 3600);
     let minutes = Math.floor((sec - (hours * 3600)) / 60);
     let seconds = sec - (hours * 3600) - (minutes * 60);
     str = ''
-    if(hours) str = str + hours + (hours > 1 ? ' Hours': ' Hour')
-    if(minutes) str = str+' ' + minutes + (minutes > 1 ? ' Minutes': ' Minute')
-    if(seconds) str = str+' ' + seconds + (seconds > 1 ? ' Seconds': ' Second')
+    if (hours) str = str + hours + (hours > 1 ? ' Hours' : ' Hour')
+    if (minutes) str = str + ' ' + minutes + (minutes > 1 ? ' Minutes' : ' Minute')
+    if (seconds) str = str + ' ' + seconds + (seconds > 1 ? ' Seconds' : ' Second')
 
     return str.trim();
 }
@@ -265,7 +266,7 @@ commonFunctions.convertSecondsToHMS = (value) => {
  * Variable to create logging
  */
 commonFunctions.logger = (() => {
-    if(LIVE_LOGGER_ENABLE){
+    if (LIVE_LOGGER_ENABLE) {
         return pino({
             browser: {
                 transmit: {

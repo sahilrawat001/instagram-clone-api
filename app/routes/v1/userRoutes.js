@@ -1,10 +1,30 @@
 'use strict';
-
 const { Joi } = require('../../utils/joiUtils');
 const CONSTANTS = require('../../utils/constants');
 const { userController } = require('../../controllers');
 
 module.exports = [
+	{
+		method: 'POST',
+		path: '/v1/upload/file',
+		joiSchemaForSwagger: {
+			headers: {
+				'authorization': Joi.string().required().description("User's JWT token.")
+			},
+			formData: {
+				file: Joi.file({ name: "file" }),
+				body: {
+					userName: Joi.string().required().description("user's username"),
+					password: Joi.string().required().description('User\'s password'),
+				},
+
+			},
+			group: 'FILE',
+			description: 'Route to upload file',
+			model: 'files'
+		},
+		handler: userController.uploadFile
+	},
 	{
 		method: 'GET',
 		path: '/v1/serverStatus',
@@ -26,14 +46,14 @@ module.exports = [
 			description: 'Route to user auth example',
 			model: 'USER_AUTH'
 		},
-		auth: CONSTANTS.AVAILABLE_AUTHS.USER,
+		auth: CONSTANTS.AVAILABLE_AUTHS.ALL,
 		handler: userController.checkUserAuth
 	}, {
 		method: 'POST',
 		path: '/v1/testEmail',
 		joiSchemaForSwagger: {
 			body: {
-				email: Joi.string().case('lower').email().optional().description("user's email"),
+				email: Joi.string().email().case('lower').email().optional().description("user's email"),
 			},
 			group: 'TEST',
 			description: 'Route to test email',
@@ -46,7 +66,7 @@ module.exports = [
 		path: '/v1/login',
 		joiSchemaForSwagger: { 
 			body: {
-				email: Joi.string().description("user's email"),
+				email: Joi.string().email().description("user's email"),
 				userName:Joi.string().description("user's username"),
 				password: Joi.string().required().description('User\'s password')
 			},
@@ -63,7 +83,7 @@ module.exports = [
 			body: {
 				userName: Joi.string().required().description("user's username"),
 				password: Joi.string().required().description('User\'s password'),
-				email: Joi.string().required().description("useremail "),
+				email: Joi.string().email().required().description("useremail "),
 				fullName: Joi.string().required().description(" full name"),
 				mobile: Joi.string().pattern(/^\d{10}$/).required().description("mobile number"),
  			},

@@ -8,6 +8,7 @@ const Schema = MONGOOSE.Schema;
 const postSchema = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
+        ref:"users",
         required :true
     },
     image: {
@@ -26,11 +27,12 @@ const postSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "users",
         comment:String
-    }],
-    timestamps:true 
+    }]
+   
  
  
 },
+   { timestamps: true}
 );
 
 module.exports = MONGOOSE.model('posts', postSchema);                                         

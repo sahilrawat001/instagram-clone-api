@@ -8,7 +8,9 @@ const { MESSAGES, ERROR_TYPES, NORMAL_PROJECTION, LOGIN_TYPES, EMAIL_TYPES, TOKE
 const { userService, sessionService, fileUploadService, trailService } = require('../services');
 const { compareHash, encryptJwt, sendEmail, generateOTP, addMinutesToDate, hashPassword } = require('../utils/utils');
 const { log } = require('console');
+
 const commonFunctions = require('../utils/utils');
+
 
 /**************************************************
  ***************** user controller ***************
@@ -26,6 +28,15 @@ userController.getServerResponse = async (payload) => {
 userController.checkServer = async (payload) => {
     return createSuccessResponse(MESSAGES.SERVER_IS_WORKING_FINE);
 };
+
+
+userController.uploadFile = async (payload) => {
+
+    const abc = await fileUploadService.uploadFileToLocal(payload, payload.file.originalname);
+    console.log(payload.file);
+    return createSuccessResponse(MESSAGES.SERVER_IS_WORKING_FINE);
+}
+
 /**
  * function to check user auth.
  * @param {*} payload 
@@ -60,13 +71,13 @@ userController.loginUser = async (payload) => {
     console.log(ans);
     // let acceptUser=commonFunctions.compareHash(payload.password, ans.password)
     if (commonFunctions.compareHash(payload.password, ans.password)) {
-        let token = commonFunctions.encryptJwt({uniqueId:ans._id})
+        let token = commonFunctions.encryptJwt({ uniqueId: ans._id })
 
-        return createSuccessResponse(MESSAGES.SUCCESS, {token});
-    } 
-    else { 
+        return createSuccessResponse(MESSAGES.SUCCESS, { token });
+    }
+    else {
         return createErrorResponse(MESSAGES.INVALID_CREDENTIALS, ERROR_TYPES.FORBIDDEN)
-    } 
+    }
     // }
     // catch {
     //     return createErrorResponse(MESSAGES.SOMETHING_WENT_WRONG, ERROR_TYPES.BAD_REQUEST)      
@@ -76,15 +87,15 @@ userController.loginUser = async (payload) => {
 
 userController.signupUser = async (payload) => {
     try {
-    const { password } = payload;
-    const hashedPassword = commonFunctions.hashPassword(password);
-    payload.password = hashedPassword;
+        const { password } = payload;
+        const hashedPassword = commonFunctions.hashPassword(password);
+        payload.password = hashedPassword;
 
         let ans = await userService.create(payload);
-         
+
         let token = commonFunctions.encryptJwt({ uniqueId: ans._id })
 
-        return createSuccessResponse(MESSAGES.SUCCESS ,token) ;
+        return createSuccessResponse(MESSAGES.SUCCESS, token);
     }
     catch (err) {
         return createErrorResponse(err.message, ERROR_TYPES.ALREADY_EXISTS)
