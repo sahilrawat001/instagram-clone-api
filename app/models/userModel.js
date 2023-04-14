@@ -12,7 +12,7 @@ const userSchema = new Schema({
         type: String,
     unique:true
     },
-    dob: { type: Date , default:''},
+    dob: { type: Date , default:Date.now()},
      email: { type: String},
     mobile: {
         type:Number ,
@@ -20,20 +20,6 @@ const userSchema = new Schema({
     password: { 
         type:String,
     },
-    followers: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-        status:{type:"string" ,default:"pending"}
-
-        }
-    ],
-    following: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-        status: { type: "string", default: "pending" }
-
-    }
-    ],
     isPublic: {
         type: Boolean,
         default:true

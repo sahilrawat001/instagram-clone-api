@@ -30,8 +30,7 @@ routeUtils.route = async (app, routes = []) => {
             middlewares.push(SERVICES.authService.validateApiKey());
         }
         if (route.auth) {
-            console.log(route.auth, " route auth ===");
-                
+                 
                 middlewares.push(SERVICES.authService.userValidate(route.auth));
           
         };
@@ -57,14 +56,12 @@ let checkJoiValidationError = (joiValidatedObject) => {
 let joiValidatorMethod = async (request, route) => {
     
     if (route.joiSchemaForSwagger.params && Object.keys(route.joiSchemaForSwagger.params).length) {
-        console.log(route.joiSchemaForSwagger.params,'-----');
-        request.params = await Joi.object(route.joiSchemaForSwagger.params).validate(request.params);
+         request.params = await Joi.object(route.joiSchemaForSwagger.params).validate(request.params);
         checkJoiValidationError(request.params);
     }
     if (route.joiSchemaForSwagger.body && Object.keys(route.joiSchemaForSwagger.body).length) {
         request.body = await Joi.object(route.joiSchemaForSwagger.body).unknown(false).validate(request.body);
-        console.log(request.body.value, '++++++');
-        checkJoiValidationError(request.body);
+         checkJoiValidationError(request.body);
     }
     if (route.joiSchemaForSwagger.query && Object.keys(route.joiSchemaForSwagger.query).length) {
         request.query = await Joi.object(route.joiSchemaForSwagger.query).unknown(false).validate(request.query);
@@ -152,8 +149,7 @@ let getMulterMiddleware = (formData) => {
 let getHandlerMethod = (route) => {
     let handler = route.handler;
     return (request, response) => {
-        console.log(request.headers.auth,'+--+-');
-        let payload = {
+         let payload = {
             ...((request.body || {}).value || {}),
             ...((request.params || {}).value || {}),
             ...((request.query || {}).value || {}),
@@ -161,15 +157,14 @@ let getHandlerMethod = (route) => {
             file: (request.file || {}),
             user: (request.user ? request.user : {}),
         };
-        console.log(payload,'*-*-');
-        //request handler/controller
+         //request handler/controller
         if (route.getExactRequest) {
             request.payload = payload;
             payload = request
         }
          handler(payload) 
-            .then((result) => {
-             if (result.filePath) {
+             .then((result) => {
+              if (result.filePath) {
                 let filePath = path.resolve(__dirname + '/../' + result.filePath)
                 return response.status(result.statusCode).sendFile(filePath)
             }

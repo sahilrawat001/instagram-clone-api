@@ -10,7 +10,7 @@ const userModel = require('../models/userModel');
 const moment = require('moment-timezone');
 const S3UploadStream = require('s3-upload-stream')
 const { syncWait } = require('../utils/utils')
-var url = require('url');
+let url = require('url');
 
 
 AWS.config.update({ accessKeyId: CONFIG.S3_BUCKET.accessKeyId, secretAccessKey: CONFIG.S3_BUCKET.secretAccessKey });
@@ -46,9 +46,9 @@ fileUploadService.uploadFileToS3 = (payload, fileName, bucketName) => {
 fileUploadService.uploadFileToLocal = async (payload, fileName, pathToUpload, pathOnServer) => {
     let directoryPath = pathToUpload ? pathToUpload : path.resolve(__dirname + `../../..${CONFIG.PATH_TO_UPLOAD_FILES_ON_LOCAL}`);
     // create user's directory if not present.
+     fileName=fileName.replace(" ","")
     fileName  =Date.now()+fileName;
-    console.log(directoryPath, '----*****');
-    if (!fs.existsSync(directoryPath)) {
+     if (!fs.existsSync(directoryPath)) {
         fs.mkdirSync(directoryPath);
     }
     let fileSavePath = `${directoryPath}/${fileName}`;
@@ -63,10 +63,9 @@ fileUploadService.uploadFileToLocal = async (payload, fileName, pathToUpload, pa
                 reject(err);
             } else {
                 let fileUrl = pathToUpload ? `${CONFIG.SERVER_URL}${pathOnServer}/${fileName}` : `${CONFIG.SERVER_URL}${CONFIG.PATH_TO_UPLOAD_FILES_ON_LOCAL}/${fileName}`;
-                var q = url.parse(fileUrl, true);
-                 console.log(q);
-                 console.log(q.pathname);
-                 resolve(q);
+                let filepath = url.parse(fileUrl, true);
+              
+                 resolve(filepath);
             }
         });
     });

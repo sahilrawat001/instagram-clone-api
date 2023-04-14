@@ -37,7 +37,7 @@ let defaults = {
         },
         SENDER: `${process.env.SENDER_NAME} <${process.env.SENDER_EMAIL}>`,
     },
-    MONGODB: { 
+    MONGODB: {
         PROTOCOL: process.env.DB_PROTOCOL || 'mongodb',
         HOST: process.env.DB_HOST || '127.0.0.1',
         PORT: process.env.DB_PORT || 27017,
@@ -59,14 +59,14 @@ let defaults = {
     SERVER: {
         PROTOCOL: process.env.SERVER_PROTOCOL || 'http',
         HOST: process.env.SERVER_HOST || '0.0.0.0',
-        PORT: process.env.SERVER_PORT || '8040',
-        SOCKET_PORT: process.env.SERVER_SOCKET_PORT || '8040',
+        PORT: process.env.SERVER_PORT || ' 7060',
+        SOCKET_PORT: process.env.SERVER_SOCKET_PORT || ' 7060',
         get URL() { return `${this.PROTOCOL}://${this.HOST}:${this.PORT}` }
     },
     SWAGGER_AUTH: {
         USERNAME: process.env.SWAGGER_AUTH_USERNAME || 'username',
         PASSWORD: process.env.SWAGGER_AUTH_PASSWORD || 'password'
-    }, 
+    },
     S3_BUCKET: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'access-key-id',
         secretAccessKey: process.env.AWS_SECRET_ACESS_KEY || 'secret-access-key',

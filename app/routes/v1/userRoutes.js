@@ -6,7 +6,7 @@ const { userController } = require('../../controllers');
 module.exports = [
 	{
 		method: 'POST',
-		path: '/v1/upload/file',
+		path: '/v1/user/update',
 		joiSchemaForSwagger: {
 			headers: {
 				'authorization': Joi.string().required().description("User's JWT token.")
@@ -14,31 +14,26 @@ module.exports = [
 			formData: {
 				file: Joi.file({ name: "file" }),
 				body: {
-					userName: Joi.string().required().description("user's username"),
-					password: Joi.string().required().description('User\'s password'),
+					fullName: Joi.string().description(" user's name"),
+					userName: Joi.string().description(" username must be unique"),
+					userBio: Joi.string().description("user's bio"),
+					dob: Joi.string().description('User\'s dob'),
+					isPublic: Joi.number().valid(1, 0)
 				},
 
 			},
 			group: 'FILE',
-			description: 'Route to upload file',
+			description: 'Route to update user profile',
 			model: 'files'
 		},
-		handler: userController.uploadFile
+		auth: CONSTANTS.AVAILABLE_AUTHS.USER,
+		handler: userController.updateProfile
 	},
+
 	{
 		method: 'GET',
-		path: '/v1/serverStatus',
-		joiSchemaForSwagger: {
-			group: 'TEST',
-			description: 'Route to check server is working fine or not?',
-			model: 'SERVER'
-		},
-		handler: userController.checkServer
-	},
-	{
-		method: 'GET', 
 		path: '/v1/user/auth',
-		joiSchemaForSwagger: { 
+		joiSchemaForSwagger: {
 			headers: {
 				'authorization': Joi.string().required().description("User's JWT token.")
 			},
@@ -48,7 +43,47 @@ module.exports = [
 		},
 		auth: CONSTANTS.AVAILABLE_AUTHS.ALL,
 		handler: userController.checkUserAuth
-	}, {
+	},
+	{
+		method: 'POST',
+		path: '/v1/sendrequest',
+		joiSchemaForSwagger: {
+			headers: {
+				'authorization': Joi.string().required().description("User's JWT token.")
+			},
+			body: {
+				userId: Joi.string().required().description("user's id of friend you want  to add"),
+			},
+			group: 'USER',
+			description: 'Route to send request',
+			model: 'SEND_REQUEST'
+		},
+		auth: CONSTANTS.AVAILABLE_AUTHS.ALL,
+
+		handler: userController.sendRequest
+	},
+
+
+	{
+		method: 'POST',
+		path: '/v1/acceptrequest',
+		joiSchemaForSwagger: {
+			headers: {
+				'authorization': Joi.string().required().description("User's JWT token.")
+			},
+			body: {
+				userId: Joi.string().required().description("user's id of friend you want  to accept"),
+			},
+			group: 'USER',
+			description: 'Route to send request',
+			model: 'ACCEPT_REQUEST'
+		},
+		auth: CONSTANTS.AVAILABLE_AUTHS.ALL,
+
+		handler: userController.acceptRequest
+	},
+
+	{
 		method: 'POST',
 		path: '/v1/testEmail',
 		joiSchemaForSwagger: {
@@ -61,13 +96,13 @@ module.exports = [
 		},
 		handler: userController.testEmail
 	},
-    {
-		method: 'POST', 
+	{
+		method: 'POST',
 		path: '/v1/login',
-		joiSchemaForSwagger: { 
+		joiSchemaForSwagger: {
 			body: {
 				email: Joi.string().email().description("user's email"),
-				userName:Joi.string().description("user's username"),
+				userName: Joi.string().description("user's username"),
 				password: Joi.string().required().description('User\'s password')
 			},
 			group: 'USER',
@@ -86,11 +121,21 @@ module.exports = [
 				email: Joi.string().email().required().description("useremail "),
 				fullName: Joi.string().required().description(" full name"),
 				mobile: Joi.string().pattern(/^\d{10}$/).required().description("mobile number"),
- 			},
- 			group: 'USER',
+			},
+			group: 'USER',
 			description: 'Route for signup ',
 			model: 'signup'
 		},
 		handler: userController.signupUser
+	},
+	{
+		method: 'GET',
+		path: '/v1/serverStatus',
+		joiSchemaForSwagger: {
+			group: 'TEST',
+			description: 'Route to check server is working fine or not?',
+			model: 'SERVER'
+		},
+		handler: userController.checkServer
 	},
 ];

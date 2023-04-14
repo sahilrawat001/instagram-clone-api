@@ -1,5 +1,6 @@
 'use strict';
 
+ 
 /********************************
  **** Managing all the services ***
  ********* independently ********
@@ -10,5 +11,6 @@ module.exports = {
     authService: require('./authService'),
     sessionService: require('./sessionService'),
     fileUploadService: require('./fileUploadService'),
-    userService: require('./userService')
+    userService: require('./userService'),
+    friendService:require('./friendService'),
 };

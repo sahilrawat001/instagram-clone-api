@@ -8,7 +8,9 @@ module.exports = {
     LOGGED_IN_SUCCESSFULLY: 'Logged in successfully.',
     EMAIL_ALREADY_EXISTS: 'Email already exists.',
     INVALID_EMAIL: 'Invalid email address.',
+    UPDATED_DATA:'Updated data successfully',
     INVALID_PASSWORD: 'Invalid password.',
+    INVALID_USERNAME:" Invalid username",
     NOT_FOUND: 'Not found.',
     LOGGED_OUT_SUCCESSFULLY: 'Logged out successfully.',
     PROFILE_UPDATE_SUCCESSFULLY: 'Profile updated successfully.',
@@ -21,4 +23,5 @@ module.exports = {
     NUMBER_ALREADY_EXIST: "This number has been already registerd.",
     OTP_EXPIRED: "Your time has expired.",
     INVALID_CREDENTIALS: 'Given email or password does not match.',
+    USER_ALREADY_EXISTS_AND_REMOVED :"User already exists so friend request revoked "
 };

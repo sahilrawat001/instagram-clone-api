@@ -1,4 +1,4 @@
-const { sessionModel } = require('../models');
+const { sessionModel } = require('./../models');
 
 let sessionService = {};
 

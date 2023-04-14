@@ -5,6 +5,7 @@ const { decryptJwt } = require("../utils/utils");
 const { createErrorResponse } = require("../helpers");
 const { userModel, sessionModel } = require('../models');
 const { MESSAGES, ERROR_TYPES, TOKEN_TYPES, AVAILABLE_AUTHS, USER_TYPE } = require('../utils/constants');
+const userService = require('./userService');
 
 let authService = {};
 
@@ -22,9 +23,9 @@ authService.validateApiKey = () => {
  * function to authenticate user.
  */
 authService.userValidate = (authType) => {
-    return (request, response, next) => {
-        validateUser(request, authType).then((isAuthorized) => {
-            if(typeof(isAuthorized) == 'string'){
+     return (request, response, next) => {
+         validateUser(request, authType).then((isAuthorized) => {
+             if(typeof(isAuthorized) == 'string'){
                 let responseObject = createErrorResponse(MESSAGES.FORBIDDEN(request.method, request.url), ERROR_TYPES.FORBIDDEN);
                 return response.status(responseObject.statusCode).json(responseObject);
             }
@@ -46,7 +47,9 @@ authService.userValidate = (authType) => {
  */
 let validateUser = async (request, authType) => {
     try {
-        let session = await sessionModel.findOne({ token: (request.headers.authorization), tokenType: TOKEN_TYPES.LOGIN });
+           let session = await sessionModel.findOne({ token: (request.headers.authorization), tokenType: TOKEN_TYPES.LOGIN });
+  
+      
         if (!session || (session && session.tokenExpDate < new Date())) {
             return false;
         }
@@ -62,15 +65,15 @@ let validateUser = async (request, authType) => {
         if(authType == AVAILABLE_AUTHS.ADMIN && session.userType !== USER_TYPE.SUPER_ADMIN){
             return false;
         }  
-
-        let user = await userModel.findOne({ _id: session.userId }).lean();
-        if (user) {
+         let user = await userService.findOne({ _id: session.userId }   )
+         if (user) {
             user.session = session;
             request.user = user;
             return true;
         }
-        return false;
+         return false;
     } catch (err) {
+        console.log(err.message);
         return false;
     }
 };
