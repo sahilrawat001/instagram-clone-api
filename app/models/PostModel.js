@@ -20,14 +20,20 @@ const postSchema = new Schema({
     },
     likes:[ {
         type: Schema.Types.ObjectId,
+        unique:true,
         ref: "users",
-        
+         
     }],
-    Comments: [{
-        type: Schema.Types.ObjectId,
-        ref: "users",
-        comment:String
-    }]
+    Comments: [
+        {
+        commentId: {
+            
+            type: Schema.Types.ObjectId,
+            ref: "users",
+        },
+        comment:{type:String}
+        }
+    ]
    
  
  

@@ -44,44 +44,10 @@ module.exports = [
 		auth: CONSTANTS.AVAILABLE_AUTHS.ALL,
 		handler: userController.checkUserAuth
 	},
-	{
-		method: 'POST',
-		path: '/v1/sendrequest',
-		joiSchemaForSwagger: {
-			headers: {
-				'authorization': Joi.string().required().description("User's JWT token.")
-			},
-			body: {
-				userId: Joi.string().required().description("user's id of friend you want  to add"),
-			},
-			group: 'USER',
-			description: 'Route to send request',
-			model: 'SEND_REQUEST'
-		},
-		auth: CONSTANTS.AVAILABLE_AUTHS.ALL,
-
-		handler: userController.sendRequest
-	},
+	 
 
 
-	{
-		method: 'POST',
-		path: '/v1/acceptrequest',
-		joiSchemaForSwagger: {
-			headers: {
-				'authorization': Joi.string().required().description("User's JWT token.")
-			},
-			body: {
-				userId: Joi.string().required().description("user's id of friend you want  to accept"),
-			},
-			group: 'USER',
-			description: 'Route to send request',
-			model: 'ACCEPT_REQUEST'
-		},
-		auth: CONSTANTS.AVAILABLE_AUTHS.ALL,
-
-		handler: userController.acceptRequest
-	},
+ 
 
 	{
 		method: 'POST',
@@ -138,4 +104,8 @@ module.exports = [
 		},
 		handler: userController.checkServer
 	},
+	 
+	 
+	
+
 ];

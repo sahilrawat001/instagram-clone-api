@@ -46,11 +46,12 @@ fileUploadService.uploadFileToS3 = (payload, fileName, bucketName) => {
 fileUploadService.uploadFileToLocal = async (payload, fileName, pathToUpload, pathOnServer) => {
     let directoryPath = pathToUpload ? pathToUpload : path.resolve(__dirname + `../../..${CONFIG.PATH_TO_UPLOAD_FILES_ON_LOCAL}`);
     // create user's directory if not present.
-     fileName=fileName.replace(" ","")
+    fileName = fileName.replace(/#|_| |$|-|%/g, "");  
+
     fileName  =Date.now()+fileName;
      if (!fs.existsSync(directoryPath)) {
         fs.mkdirSync(directoryPath);
-    }
+    } 
     let fileSavePath = `${directoryPath}/${fileName}`;
     let writeStream = fs.createWriteStream(fileSavePath);
     return new Promise((resolve, reject) => {

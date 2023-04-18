@@ -8,5 +8,6 @@ module.exports = {
     sessionModel: require('./sessionModel'),
     UserModel: require('./userModel'),
     friendModel: require('./friendsSchema'),
+    postModel :require("./PostModel")
 };
  

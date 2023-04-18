@@ -12,5 +12,6 @@ module.exports = {
     sessionService: require('./sessionService'),
     fileUploadService: require('./fileUploadService'),
     userService: require('./userService'),
-    friendService:require('./friendService'),
+    friendService: require('./friendService'),
+    postService:require('./postService')
 };

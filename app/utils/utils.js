@@ -11,6 +11,7 @@ const CONSTANTS = require('./constants');
 const sessionModel = require('../models/sessionModel');
 const { createPinoBrowserSend, createWriteStream } = require("pino-logflare");
 const { SMTP, WEB_URL, ADMIN_WEB_URL, PINO, ENVIRONMENT, LIVE_LOGGER_ENABLE } = require('../../config');
+ const { default: mongoose } = require("mongoose");
 
 const PINO_CRED = { apiKey: PINO.API_KEY, sourceToken: PINO.API_SECRET };
 
@@ -32,6 +33,10 @@ let commonFunctions = {};
 commonFunctions.hashPassword = (payloadString) => {
     return BCRYPT.hashSync(payloadString, CONSTANTS.SECURITY.BCRYPT_SALT);
 };
+
+
+
+
 
 /**
  * @param {string} plainText 
