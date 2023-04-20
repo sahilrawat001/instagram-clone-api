@@ -37,20 +37,22 @@ let defaults = {
         },
         SENDER: `${process.env.SENDER_NAME} <${process.env.SENDER_EMAIL}>`,
     },
-    MONGODB: {
-        PROTOCOL: process.env.DB_PROTOCOL || 'mongodb',
-        HOST: process.env.DB_HOST || '127.0.0.1',
-        PORT: process.env.DB_PORT || 27017,
-        NAME: process.env.DB_NAME || 'projected',
-        USER: process.env.DB_USER || 'username',
-        PASSWORD: process.env.DB_PASS || 'password',
-        get URL() { return process.env.DB_URL || `${this.PROTOCOL}://${this.HOST}:${this.PORT}/${this.NAME}` }
-        // get URL() { return process.env.DB_URL || `${this.PROTOCOL}://${this.USER}:${this.PASSWORD}@${this.HOST}:${this.PORT}/${this.NAME}` }
-    },
+    // MONGODB: {
+        
+    //     PROTOCOL: process.env.DB_PROTOCOL || 'mongodb',
+    //     HOST: process.env.DB_HOST || '127.0.0.1',
+    //     PORT: process.env.DB_PORT || 27017,
+    //     NAME: process.env.DB_NAME || 'projected',
+    //     USER: process.env.DB_USER || 'username',
+    //     PASSWORD: process.env.DB_PASS || 'password',
+    //     get URL() { return process.env.DB_URL || `${this.PROTOCOL}://${this.HOST}:${this.PORT}/${this.NAME}` }
+    //     // get URL() { return process.env.DB_URL || `${this.PROTOCOL}://${this.USER}:${this.PASSWORD}@${this.HOST}:${this.PORT}/${this.NAME}` }
+    // },
+    MONGODB:"mongodb+srv://rajangrover:sahil12@cluster0.atggu5u.mongodb.net/test",
     REDIS: {
         PORT: process.env.REDIS_PORT || '6379',
         HOST: process.env.REDIS_HOST || '127.0.0.1',
-        PASSWORD: process.env.REDIS_PASSWORD || ''
+        PASSWORD: process.env.REDIS_PASSWORD || '' 
     },
     FIREBASE: {
         SERVER_KEY: process.env.FIREBASE_SERVER_KEY || 'firebase server key',
@@ -59,8 +61,8 @@ let defaults = {
     SERVER: {
         PROTOCOL: process.env.SERVER_PROTOCOL || 'http',
         HOST: process.env.SERVER_HOST || '0.0.0.0',
-        PORT: process.env.SERVER_PORT || ' 7060',
-        SOCKET_PORT: process.env.SERVER_SOCKET_PORT || ' 7060',
+        PORT: process.env.SERVER_PORT || ' 8060',
+        SOCKET_PORT: process.env.SERVER_SOCKET_PORT || ' 8060',
         get URL() { return `${this.PROTOCOL}://${this.HOST}:${this.PORT}` }
     },
     SWAGGER_AUTH: {

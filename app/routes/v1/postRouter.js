@@ -5,7 +5,65 @@ const { postController } = require('../../controllers');
 
 module.exports = [
   
-    
+    {
+        method: 'POST',
+        path: '/v2/newchat',
+        joiSchemaForSwagger: {
+            headers: {
+                'authorization': Joi.string().required().description("User's JWT token.")
+            },
+            body: {
+                userId: Joi.string().required().description("user's id of friend you want  to add for chat"),
+            },
+            group: 'CHAT',
+            description: 'Route to chat with friend',
+            model: 'ADD_CHAT'
+        },
+        auth: CONSTANTS.AVAILABLE_AUTHS.ALL,
+
+        handler: postController.addChat 
+    },
+    {
+        method: 'POST',
+        path: '/v2/allchats',
+        joiSchemaForSwagger: {
+            headers: {
+                'authorization': Joi.string().required().description("User's JWT token.")
+            },
+            // body: {
+            //     userId: Joi.string().required().description("user's id of friend you want  to add for chat"),
+            // },
+            group: 'CHAT',
+            description: 'Route to get all chats',
+            model: 'ALL_CHAT'
+        },
+        auth: CONSTANTS.AVAILABLE_AUTHS.ALL,
+
+        handler: postController.getAllChats 
+    },
+    {
+        method: 'POST',
+        path: '/v2/sendMessage',
+        joiSchemaForSwagger: {
+            headers: {
+                'authorization': Joi.string().required().description("User's JWT token.")
+            },
+            body: {
+                content: Joi.string().required().description("user's id of friend you want  to add for chat"),
+                chatId:Joi.string().required()
+            },
+            group: 'CHAT',
+            description: 'Route to get all chats',
+            model: 'ALL_CHAT'
+        },
+        auth: CONSTANTS.AVAILABLE_AUTHS.ALL,
+
+        handler: postController.sendMessage 
+    },
+
+
+
+
     {
         method: 'POST',
         path: '/v2/sendrequest',
