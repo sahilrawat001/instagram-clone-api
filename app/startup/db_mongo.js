@@ -7,6 +7,6 @@ const { MONGODB } = require('../../config');
 
 module.exports = async () => { 
  
-    await mongoose.connect(MONGODB.URL );
-    console.log('MongoDB connected at', MONGODB.URL);
+    await mongoose.connect(MONGODB );
+    console.log('MongoDB connected at', MONGODB);
 }; 

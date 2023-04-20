@@ -23,7 +23,7 @@ const friendSchema = new Schema({
     },
     status: {
         type: Number,
-        enum: [-1, 1 ],
+        enum: [-1, 0,1],
         // 1 for accepted  , -1 for pending ,
         default: -1,
         required: true,

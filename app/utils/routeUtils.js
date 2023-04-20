@@ -27,7 +27,7 @@ routeUtils.route = async (app, routes = []) => {
         }
         middlewares.push(getValidatorMiddleware(route));
         if(!route.authFree){
-            middlewares.push(SERVICES.authService.validateApiKey());
+           //  middlewares.push(SERVICES.authService.validateApiKey());
         }
         if (route.auth) {
                  
@@ -164,7 +164,7 @@ let getHandlerMethod = (route) => {
         }
          handler(payload) 
              .then((result) => {
-              if (result.filePath) {
+               if (result.filePath) {
                 let filePath = path.resolve(__dirname + '/../' + result.filePath)
                 return response.status(result.statusCode).sendFile(filePath)
             }

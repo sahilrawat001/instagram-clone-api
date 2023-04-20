@@ -5,7 +5,7 @@ const CONFIG = require('../../config');
 const { createErrorResponse, createSuccessResponse } = require("../helpers");
 const mongoose = require("mongoose");
 const { MESSAGES, ERROR_TYPES, NORMAL_PROJECTION, LOGIN_TYPES, EMAIL_TYPES, TOKEN_TYPES, USER_TYPE, OTP_EXPIRY_TIME, DEFAULT_PROFILE_IMAGE, FILE_UPLOAD_TYPE, USER_ACTIVITY_STATUS, TRAIL_KEYS, OTP_TYPE, ISVERIFIED, DEVICE_TYPES, DEEP_LINK_CUSTOM_SCHEME } = require('../utils/constants');
-const { userService, postService, friendService, sessionService, fileUploadService, trailService } = require('../services');
+const { userService, postService, friendService, sessionService, fileUploadService, trailService, chatService, messageService } = require('../services');
 const { compareHash, encryptJwt, sendEmail, generateOTP, addMinutesToDate, hashPassword } = require('../utils/utils');
 const { log } = require('console');
 
@@ -67,6 +67,66 @@ postController.sendRequest = async (payload) => {
 }
 
 
+postController.addChat =async(payload)=>{
+ let isChat=  await chatService.find( {
+    isGroupChat:false,
+    $and:[
+        {users:{$elemMatch:{ $eq:payload.userId }  }},
+        {users:{$elemMatch:{ $eq:payload.user._id }  }},
+    ]
+   }  )
+    if (isChat.length > 0) {
+   } else {
+    let chatData = {
+      chatName: "sender",
+      isGroupChat: false,
+      users: [payload.user._id, payload.userId],
+    };
+    console.log(chatData);
+    
+    const createdChat = await chatService.create(chatData);
+    const FullChat = await chatService.findOne({ _id: createdChat._id });
+    console.log(FullChat); 
+}
+
+return createSuccessResponse(MESSAGES.SUCCESS);
+
+}
+
+postController.getAllChats= async( payload )=>{
+  let result= await chatService.find( 
+    {users:{$elemMatch:{ $eq:payload.user._id }  }} 
+    )
+  
+
+    return createSuccessResponse(result ,MESSAGES.SUCCESS);
+
+
+}
+
+
+postController.sendMessage=async (payload)=>{
+    try {
+    let {chatId, content} =payload;
+
+    let newMessage = {
+        sender: payload.user._id,
+        content: content,
+        chat: chatId,
+      };
+        let message = await  messageService.create(newMessage);
+    
+   
+    
+        await chatService.findOneAndUpdate( {_id: chatId}, { latestMessage: message });
+    
+        return createSuccessResponse(MESSAGES.SUCCESS);
+    } catch (error) {
+        
+        throw new Error(error.message);
+    }
+    
+}
 
 
 postController.acceptRequest = async (payload) => {

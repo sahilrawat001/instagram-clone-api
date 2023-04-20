@@ -1,6 +1,7 @@
 'use strict';
 
  
+ 
 /********************************
  **** Managing all the services ***
  ********* independently ********
@@ -13,5 +14,7 @@ module.exports = {
     fileUploadService: require('./fileUploadService'),
     userService: require('./userService'),
     friendService: require('./friendService'),
-    postService:require('./postService')
+    postService:require('./postService'),
+    chatService :require('./chatService'),
+    messageService:require('./messageService')
 };
