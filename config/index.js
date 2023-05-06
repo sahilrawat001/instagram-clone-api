@@ -37,17 +37,17 @@ let defaults = {
         },
         SENDER: `${process.env.SENDER_NAME} <${process.env.SENDER_EMAIL}>`,
     },
-    // MONGODB: {
+    MONGODB: {
         
-    //     PROTOCOL: process.env.DB_PROTOCOL || 'mongodb',
-    //     HOST: process.env.DB_HOST || '127.0.0.1',
-    //     PORT: process.env.DB_PORT || 27017,
-    //     NAME: process.env.DB_NAME || 'projected',
-    //     USER: process.env.DB_USER || 'username',
-    //     PASSWORD: process.env.DB_PASS || 'password',
-    //     get URL() { return process.env.DB_URL || `${this.PROTOCOL}://${this.HOST}:${this.PORT}/${this.NAME}` }
-    //     // get URL() { return process.env.DB_URL || `${this.PROTOCOL}://${this.USER}:${this.PASSWORD}@${this.HOST}:${this.PORT}/${this.NAME}` }
-    // },
+        PROTOCOL: process.env.DB_PROTOCOL || 'mongodb',
+        HOST: process.env.DB_HOST || '127.0.0.1',
+        PORT: process.env.DB_PORT || 27017,
+        NAME: process.env.DB_NAME || 'projected',
+        USER: process.env.DB_USER || 'username',
+        PASSWORD: process.env.DB_PASS || 'password',
+        get URL() { return process.env.DB_URL || `${this.PROTOCOL}://${this.HOST}:${this.PORT}/${this.NAME}` }
+        // get URL() { return process.env.DB_URL || `${this.PROTOCOL}://${this.USER}:${this.PASSWORD}@${this.HOST}:${this.PORT}/${this.NAME}` }
+    },
     MONGODB:"mongodb+srv://rajangrover:sahil12@cluster0.atggu5u.mongodb.net/test",
     REDIS: {
         PORT: process.env.REDIS_PORT || '6379',
